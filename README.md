@@ -69,7 +69,7 @@ FROM suppliers
 WHERE supplier_id = 11
 ```
 
-* [ ] ***list orders descending by the order date. The order with date 1998-05-06 should be at the top***
+* [x] ***list orders descending by the order date. The order with date 1998-05-06 should be at the top***
 
   <details><summary>hint</summary>
 
@@ -77,10 +77,12 @@ WHERE supplier_id = 11
   </details>
 
 ```SQL
-
+SELECT *
+FROM orders
+ORDER BY order_date DESC
 ```
 
-* [ ] ***find all suppliers who have names longer than 20 characters. Returns 11 records***
+* [x] ***find all suppliers who have names longer than 20 characters. Returns 11 records***
 
   <details><summary>hint</summary>
 
@@ -89,7 +91,9 @@ WHERE supplier_id = 11
   </details>
 
 ```SQL
-
+SELECT *
+FROM suppliers
+WHERE length(company_name) > 20
 ```
 
 * [ ] ***find all customers that include the word 'MARKET' in the contact title. Should return 19 records***
