@@ -222,7 +222,7 @@ ORDER BY c.city
 
 Note: This step does not use PostgreSQL!
 
-* [ ] ***Take the following data and normalize it into a 3NF database***
+* [x] ***Take the following data and normalize it into a 3NF database***
 
 | Person Name | Pet Name | Pet Type | Pet Name 2 | Pet Type 2 | Pet Name 3 | Pet Type 3 | Fenced Yard | City Dweller |
 |-------------|----------|----------|------------|------------|------------|------------|-------------|--------------|
@@ -235,53 +235,53 @@ Below are some empty tables to be used to normalize the database
 * Not all of the cells will contain data in the final solution
 * Feel free to edit these tables as necessary
 
-Table Name:
+Table Name: Person
 
-|            |            |            |            |            |            |            |            |            |
+| person_id  | person_name| fenced_yard|city_dweller|            |            |            |            |            |
 |------------|------------|------------|------------|------------|------------|------------|------------|------------|
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
+| 1          | Jane       | No         | Yes        |            |            |            |            |            |
+| 2          | Bob        | No         | No         |            |            |            |            |            |
+| 3          | Sam        | Yes        | No         |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 
-Table Name:
+Table Name: Pets
 
-|            |            |            |            |            |            |            |            |            |
+| pet_id     | pet_name   | pet_type_id|            |            |            |            |            |            |
 |------------|------------|------------|------------|------------|------------|------------|------------|------------|
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
+| 1          | Ellie      |  3         |            |            |            |            |            |            |
+| 2          | Joe        |  1         |            |            |            |            |            |            |
+| 3          | Ginger     |  3         |            |            |            |            |            |            |
+| 4          | Tiger      |  2         |            |            |            |            |            |            |
+| 5          | Miss Kitty |  2         |            |            |            |            |            |            |
+| 6          | Toby       |  4         |            |            |            |            |            |            |
+| 7          | Bubble     |  5         |            |            |            |            |            |            |
 
-Table Name:
+Table Name: PetType
 
-|            |            |            |            |            |            |            |            |            |
+| pet_type_id| type_name  |            |            |            |            |            |            |            |
 |------------|------------|------------|------------|------------|------------|------------|------------|------------|
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
+| 1          | Horse      |            |            |            |            |            |            |            |
+| 2          | Cat        |            |            |            |            |            |            |            |
+| 3          | Dog        |            |            |            |            |            |            |            |
+| 4          | Turtle     |            |            |            |            |            |            |            |
+| 5          | Fish       |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 
-Table Name:
+Table Name: PersonPets
 
-|            |            |            |            |            |            |            |            |            |
+| person_id  | pet_id     |            |            |            |            |            |            |            |
 |------------|------------|------------|------------|------------|------------|------------|------------|------------|
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
+|  1         | 1          |            |            |            |            |            |            |            |
+|  1         | 4          |            |            |            |            |            |            |            |
+|  1         | 6          |            |            |            |            |            |            |            |
+|  2         | 2          |            |            |            |            |            |            |            |
+|  3         | 3          |            |            |            |            |            |            |            |
+|  3         | 5          |            |            |            |            |            |            |            |
+|  3         | 7          |            |            |            |            |            |            |            |
 
 ---
 
@@ -290,7 +290,19 @@ Table Name:
 * [ ] ***delete all customers that have no orders. Should delete 2 (or 3 if you haven't deleted the record added) records***
 
 ```SQL
+DELETE
+FROM customers c
+USING orders o
+WHERE c.customer_id = o.customer_id AND EXISTS
+(
+	SELECT o.customer_id
+ 	FROM orders o
+ 	RIGHT JOIN customers c
+ 	ON o.customer_id = c.customer_id
+ 	WHERE o.customer_id IS NULL
+)
 
+Runs, but violates foreign key constraints. I am not sure if it is valid or not.
 ```
 
 * [ ] ***Create Database and Table: After creating the database, tables, columns, and constraint, generate the script necessary to recreate the database. This script is what you will submit for review***
